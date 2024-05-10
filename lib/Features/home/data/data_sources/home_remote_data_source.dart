@@ -1,43 +1,66 @@
-import 'package:books/Features/home/data/models/book_model/book_model.dart';
-import 'package:books/Features/home/domain/entities/book_entity.dart';
-import 'package:books/constants.dart';
+
+import 'dart:core';
+
+import 'package:books/Features/home/data/models/book_model/BookModel.dart';
+import 'package:books/core/constants.dart';
 import 'package:books/core/utils/api_service.dart';
-import 'package:books/core/utils/fucnctions/save_books.dart';
 
-abstract class HomeRepoDataSource {
-  Future<List<BookEntity>> featchFeaturedBooks();
-  Future<List<BookEntity>> featchNewestBooks();
+import '../../../../core/functions/save_books_data.dart';
+import '../../domain/entities/book_entity.dart';
+
+abstract class HomeRemoteDataSource
+{
+
+  Future<List<BookEntity>> fetchFeaturedBooks();
+
+  Future<List<BookEntity>> fetchBestSellerBooks();
+
 }
 
-class HomeRepoDataSourceImp extends HomeRepoDataSource {
+class HomeRemoteDataSourceImp extends HomeRemoteDataSource {
+
   final ApiService apiService;
+  HomeRemoteDataSourceImp({required this.apiService});
 
-  HomeRepoDataSourceImp(this.apiService);
-  @override
-  Future<List<BookEntity>> featchFeaturedBooks() async {
-    var data = await apiService.get(
-        endPoint: 'volumes?Filtering=free-ebooks&q=programming');
-    List<BookEntity> books = getBooksList(data);
-    SaveBooksData(books, kFeaturedBox);
-    return books;
-  }
 
   @override
-  Future<List<BookEntity>> featchNewestBooks() async {
-    var data = await apiService.get(
-        endPoint: 'volumes?Filtering=free-ebooks&Sorting=newest&q=programming');
-    List<BookEntity> books = getBooksList(data);
-    SaveBooksData(books, kNewestBox);
-    return books;
-  }
-}
+  Future<List<BookEntity>> fetchBestSellerBooks() async 
+  {
+     
 
-List<BookEntity> getBooksList(Map<String, dynamic> data) {
-  List<BookEntity> books = [];
-  for (var bookMap in data['items']) {
-    books.add(
-      BookModel.fromJson(bookMap),
-    );
+   var data=await apiService.get(endPoint: 'volumes?Filtering=free-ebooks&Sorting=newest&q=software engineering' );
+
+   List<BookEntity>booksList=getBooksList(data);
+   saveBooksData(booksList,kBestsellerbooks);
+    return booksList;
+    
   }
-  return books;
+
+  List<BookEntity> getBooksList(data) {
+    List<BookEntity> booksList = [];
+
+    for (var item in data) {
+      booksList.add(BookModel.fromJson(data['items']));
+    }
+
+    return booksList;
+  }
+
+
+
+  @override
+  Future<List<BookEntity>> fetchFeaturedBooks() async
+  {
+   
+     var data=await apiService.get(endPoint: 'volumes?Filtering=free-ebooks&q=programming');
+     List<BookEntity>booksList=getBooksList(data);
+     saveBooksData(booksList,kFeaturedBox);
+     return booksList;
+
+  }
+
+
+
+
+
 }

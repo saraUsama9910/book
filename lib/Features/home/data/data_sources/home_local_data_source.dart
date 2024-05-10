@@ -1,22 +1,32 @@
-import 'package:books/Features/home/domain/entities/book_entity.dart';
-import 'package:books/constants.dart';
+
+
+import 'package:books/core/constants.dart';
 import 'package:hive/hive.dart';
 
-abstract class HomeLocalDataSource {
-  List<BookEntity> featchFeaturedBooks();
-  List<BookEntity> featchNewestBooks();
+import '../../domain/entities/book_entity.dart';
+
+abstract class HomeLocalDataSource
+{
+
+  List<BookEntity> fetchFeaturedBooks();
+
+  List<BookEntity> fetchBestSellerBooks();
+
 }
 
 class HomeLocalDataSourceImp extends HomeLocalDataSource {
+
+
   @override
-  List<BookEntity> featchFeaturedBooks() {
-    var box = Hive.box<BookEntity>(kFeaturedBox);
+  List<BookEntity> fetchBestSellerBooks() {
+
+    var box=Hive.box<BookEntity>(kBestsellerbooks);
     return box.values.toList();
   }
 
   @override
-  List<BookEntity> featchNewestBooks() {
-    var box = Hive.box<BookEntity>(kNewestBox);
+  List<BookEntity> fetchFeaturedBooks() {
+    var box=Hive.box<BookEntity>(kFeaturedBox);
     return box.values.toList();
   }
 }

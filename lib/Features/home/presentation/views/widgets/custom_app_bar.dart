@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../../core/utils/assets.dart';
 
 class CustomAppBar extends StatelessWidget {
-  const CustomAppBar({Key? key}) : super(key: key);
+  const CustomAppBar({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -15,8 +15,8 @@ class CustomAppBar extends StatelessWidget {
       child: Row(
         children: [
           Image.asset(
-            AssetsData.logo,
-            height: 18,
+            AssetsData.logo2,
+            height: 34,
           ),
           const Spacer(),
           IconButton(
